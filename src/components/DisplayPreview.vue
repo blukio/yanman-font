@@ -111,14 +111,14 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: var(--sp-2xl);
   overflow: hidden;
 }
 
 .preview-frame {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -129,8 +129,8 @@ watch(
 .frame-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
+  gap: var(--sp-lg);
+  padding: var(--sp-lg) var(--sp-2xl);
   border-bottom: 1px solid var(--border-color);
   background: rgba(0, 0, 0, 0.2);
 }
@@ -151,14 +151,14 @@ watch(
 }
 
 .frame-title {
-  font-size: 11px;
+  font-size: var(--fs-sm);
   color: var(--text-secondary);
   font-family: 'SF Mono', 'Fira Code', monospace;
 }
 
 .frame-origin {
   margin-left: auto;
-  font-size: 10px;
+  font-size: var(--fs-xs);
   color: var(--text-secondary);
   opacity: 0.6;
   font-family: 'SF Mono', 'Fira Code', monospace;
@@ -170,7 +170,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
+  min-height: var(--output-min-h);
   overflow: hidden;
 }
 
@@ -184,9 +184,9 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: var(--sp-xl);
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: var(--fs-base);
   padding: 40px 20px;
 
   svg {

@@ -11,6 +11,7 @@ export type ModType = 'font' | 'image'
 export interface FontConfig {
   width: number
   height: number
+  displayWidth: number
   modMode: ModMode
   polarity: Polarity
   inputText: string

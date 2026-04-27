@@ -1,33 +1,40 @@
 import type { ModMode, Polarity } from '@/types'
 
 /**
- * 文字转点阵（通过 Canvas 渲染后二值化）
+ * 文字转点阵（通过 Canvas 渲染后二值化），支持按 displayWidth 自动换行
  */
 export function textToDotMatrix(
   text: string,
   charWidth: number,
   charHeight: number,
-  polarity: Polarity
+  polarity: Polarity,
+  displayWidth: number
 ): number[][] {
-  const totalWidth = charWidth * text.length
+  const charsPerRow = Math.max(1, Math.floor(displayWidth / charWidth))
+  const rows = Math.ceil(text.length / charsPerRow)
+  const canvasWidth = charsPerRow * charWidth
+  const canvasHeight = rows * charHeight
+
   const canvas = document.createElement('canvas')
-  canvas.width = totalWidth
-  canvas.height = charHeight
+  canvas.width = canvasWidth
+  canvas.height = canvasHeight
   const ctx = canvas.getContext('2d')!
 
   ctx.fillStyle = '#000000'
-  ctx.fillRect(0, 0, totalWidth, charHeight)
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
   ctx.fillStyle = '#ffffff'
   ctx.font = `bold ${charHeight - 2}px sans-serif`
   ctx.textAlign = 'left'
   ctx.textBaseline = 'top'
   for (let i = 0; i < text.length; i++) {
-    ctx.fillText(text[i], i * charWidth, 1)
+    const row = Math.floor(i / charsPerRow)
+    const col = i % charsPerRow
+    ctx.fillText(text[i], col * charWidth, row * charHeight + 1)
   }
 
-  const imageData = ctx.getImageData(0, 0, totalWidth, charHeight)
-  return binarizeImageData(imageData, totalWidth, charHeight, 128, polarity)
+  const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight)
+  return binarizeImageData(imageData, canvasWidth, canvasHeight, 128, polarity)
 }
 
 /**

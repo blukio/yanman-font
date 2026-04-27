@@ -80,32 +80,32 @@ const handleDownload = () => {
 
 <style scoped lang="scss">
 .code-output {
-  padding: 0 16px 16px;
+  padding: 0 var(--sp-2xl) var(--sp-2xl);
 }
 
 .output-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 0;
+  padding: var(--sp-sm) 0;
 }
 
 .toolbar-left, .toolbar-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--sp-md);
 }
 
 .toolbar-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
+  gap: var(--sp-sm);
+  padding: 5px var(--sp-lg);
   background: transparent;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   cursor: pointer;
   transition: all 0.2s;
 
@@ -138,11 +138,11 @@ const handleDownload = () => {
 .output-content {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: var(--radius-lg);
+  padding: var(--sp-2xl);
   position: relative;
-  min-height: 120px;
-  max-height: 220px;
+  min-height: var(--output-min-h);
+  max-height: var(--output-max-h);
   overflow: auto;
 }
 
@@ -188,7 +188,7 @@ const handleDownload = () => {
 
 .code-block {
   font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-  font-size: 12px;
+  font-size: var(--fs-sm);
   line-height: 1.6;
   color: var(--accent-green);
   white-space: pre;
@@ -208,7 +208,7 @@ const handleDownload = () => {
 
 .empty-hint {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--fs-sm);
   font-family: 'SF Mono', 'Fira Code', monospace;
 }
 </style>

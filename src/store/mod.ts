@@ -8,6 +8,7 @@ export const useModStore = defineStore('mod', () => {
   const fontConfig = reactive<FontConfig>({
     width: 16,
     height: 16,
+    displayWidth: 128,
     modMode: 'column-row',
     polarity: 'positive',
     inputText: '',

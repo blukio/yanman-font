@@ -24,13 +24,13 @@
 }
 
 .layout-header {
-  height: 57px;
+  height: var(--header-h);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-color);
   background: var(--bg-panel);
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 var(--sp-3xl);
 }
 
 .header-container {
@@ -39,7 +39,7 @@
 }
 
 .header-title {
-  font-size: 22px;
+  font-size: var(--fs-xl);
   font-weight: 600;
   color: var(--accent-cyan);
   letter-spacing: 1px;

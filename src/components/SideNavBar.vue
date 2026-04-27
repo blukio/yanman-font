@@ -66,7 +66,7 @@ const handleGenerate = async () => {
 
     if (store.modType === 'font') {
       const cfg = store.fontConfig
-      matrix = textToDotMatrix(cfg.inputText, cfg.width, cfg.height, cfg.polarity)
+      matrix = textToDotMatrix(cfg.inputText, cfg.width, cfg.height, cfg.polarity, cfg.displayWidth)
       varName = `font_${cfg.width}x${cfg.height}`
     } else {
       const cfg = store.imageConfig
@@ -82,10 +82,10 @@ const handleGenerate = async () => {
     }
 
     const totalWidth = store.modType === 'font'
-      ? store.fontConfig.width * store.fontConfig.inputText.length
+      ? Math.min(store.fontConfig.displayWidth, store.fontConfig.width * store.fontConfig.inputText.length)
       : store.imageConfig.targetWidth
     const totalHeight = store.modType === 'font'
-      ? store.fontConfig.height
+      ? Math.ceil(store.fontConfig.inputText.length / Math.max(1, Math.floor(store.fontConfig.displayWidth / store.fontConfig.width))) * store.fontConfig.height
       : store.imageConfig.targetHeight
     const modMode = store.modType === 'font' ? store.fontConfig.modMode : store.imageConfig.modMode
 
@@ -144,6 +144,20 @@ const handleGenerate = async () => {
                   <span class="field-hint">高度</span>
                   <div class="field-input">
                     <input v-model.number="store.fontConfig.height" type="number" min="1" max="256" />
+                    <span class="field-unit">px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-item">
+            <div class="config-label">显示宽度（自动换行）</div>
+            <div class="size-inputs">
+              <div class="size-field">
+                <div class="field-inner">
+                  <div class="field-input">
+                    <input v-model.number="store.fontConfig.displayWidth" type="number" min="1" max="1024" />
                     <span class="field-unit">px</span>
                   </div>
                 </div>
@@ -308,7 +322,7 @@ const handleGenerate = async () => {
 
 <style scoped lang="scss">
 .side-nav {
-  width: 320px;
+  width: var(--sidebar-w);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -318,17 +332,17 @@ const handleGenerate = async () => {
 
 .nav-tabs {
   display: flex;
-  padding: 24px 24px 20px;
+  padding: var(--sp-3xl) var(--sp-3xl) var(--sp-2xl);
 }
 
 .nav-tab {
   flex: 1;
   text-align: center;
-  padding: 8px 0;
-  font-size: 13px;
+  padding: var(--sp-md) 0;
+  font-size: var(--fs-base);
   color: var(--text-secondary);
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   transition: all 0.2s;
   font-weight: 500;
 
@@ -346,7 +360,7 @@ const handleGenerate = async () => {
 .config-scroll {
   flex: 1;
   overflow-y: auto;
-  padding: 0 24px;
+  padding: 0 var(--sp-3xl);
 }
 
 .config-section {
@@ -355,51 +369,51 @@ const handleGenerate = async () => {
 }
 
 .config-item {
-  padding: 16px 0;
+  padding: var(--sp-2xl) 0;
 }
 
 .config-label {
-  font-size: 12px;
+  font-size: var(--fs-sm);
   color: var(--text-label);
-  margin-bottom: 10px;
+  margin-bottom: var(--sp-lg);
   font-weight: 500;
 }
 
 .size-inputs {
   display: flex;
-  gap: 12px;
+  gap: var(--sp-xl);
 }
 
 .size-field {
   flex: 1;
   background: var(--bg-input);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 
   .field-inner {
-    padding: 8px 12px;
+    padding: var(--sp-md) var(--sp-xl);
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--sp-sm);
   }
 
   .field-hint {
-    font-size: 11px;
+    font-size: var(--fs-sm);
     color: var(--text-secondary);
   }
 
   .field-input {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--sp-xs);
 
     input {
       flex: 1;
       background: none;
       border: none;
       color: var(--text-primary);
-      font-size: 14px;
+      font-size: var(--fs-md);
       outline: none;
       width: 100%;
       font-family: inherit;
@@ -411,7 +425,7 @@ const handleGenerate = async () => {
     }
 
     .field-unit {
-      font-size: 12px;
+      font-size: var(--fs-sm);
       color: var(--text-secondary);
     }
   }
@@ -419,15 +433,15 @@ const handleGenerate = async () => {
 
 .polarity-options {
   display: flex;
-  gap: 20px;
+  gap: var(--sp-2xl);
 }
 
 .polarity-option {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--sp-sm);
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--fs-base);
   color: var(--text-primary);
 
   input[type="radio"] {
@@ -479,13 +493,13 @@ const handleGenerate = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px;
+  gap: var(--sp-md);
+  padding: var(--sp-xl);
   background: var(--bg-input);
   border: 1px dashed var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: var(--fs-base);
   cursor: pointer;
   transition: all 0.2s;
 
@@ -503,16 +517,16 @@ const handleGenerate = async () => {
 .image-selected {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: var(--sp-md);
+  padding: var(--sp-lg) var(--sp-xl);
   background: var(--bg-input);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 .image-name {
   flex: 1;
-  font-size: 13px;
+  font-size: var(--fs-base);
   color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -542,11 +556,11 @@ const handleGenerate = async () => {
 .threshold-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--sp-xl);
 }
 
 .threshold-value {
-  font-size: 13px;
+  font-size: var(--fs-base);
   color: var(--text-primary);
   min-width: 28px;
   text-align: right;
@@ -554,24 +568,24 @@ const handleGenerate = async () => {
 }
 
 .main-cta {
-  padding: 24px;
+  padding: var(--sp-3xl);
   border-top: 1px solid var(--border-color);
 }
 
 .generate-btn {
   width: 100%;
-  height: 48px;
+  height: var(--btn-h);
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   color: #fff;
-  font-size: 15px;
+  font-size: var(--fs-lg);
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--sp-md);
   transition: opacity 0.2s;
 
   &:hover:not(:disabled) {
@@ -595,7 +609,7 @@ const handleGenerate = async () => {
     background: var(--bg-input);
     border: 1px solid var(--border-color);
     box-shadow: none;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
 
     .el-input__inner {
       color: var(--text-primary);
@@ -611,9 +625,9 @@ const handleGenerate = async () => {
   background: var(--bg-input);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--fs-base);
 
   &::placeholder {
     color: var(--text-secondary);
@@ -628,11 +642,11 @@ const handleGenerate = async () => {
   background: var(--bg-input);
   border: 1px solid var(--border-color);
   box-shadow: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 
   .el-input__inner {
     color: var(--text-primary);
-    font-size: 13px;
+    font-size: var(--fs-base);
 
     &::placeholder {
       color: var(--text-secondary);
