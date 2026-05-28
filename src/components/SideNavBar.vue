@@ -3,18 +3,11 @@ import { useModStore } from '@/store/mod'
 import { textToDotMatrix, imageToDotMatrix, dotMatrixToCArray } from '@/utils/mod'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
-import type { ModMode } from '@/types'
+import ModModeSelector from '@/components/ModModeSelector.vue'
 
 const store = useModStore()
 
 const imageInputRef = ref<HTMLInputElement>()
-
-const modModeOptions: { label: string; value: ModMode }[] = [
-  { label: '列行式', value: 'column-row' },
-  { label: '行列式', value: 'row-column' },
-  { label: '逐列式', value: 'column-by-column' },
-  { label: '逐行式', value: 'row-by-row' },
-]
 
 /** 选择图片 */
 const handleSelectImage = () => {
@@ -167,14 +160,7 @@ const handleGenerate = async () => {
 
           <div class="config-item">
             <div class="config-label">取模方式</div>
-            <el-select v-model="store.fontConfig.modMode" class="dark-select">
-              <el-option
-                v-for="opt in modModeOptions"
-                :key="opt.value"
-                :label="opt.label"
-                :value="opt.value"
-              />
-            </el-select>
+            <ModModeSelector v-model="store.fontConfig.modMode" />
           </div>
 
           <div class="config-item">
@@ -279,14 +265,7 @@ const handleGenerate = async () => {
 
           <div class="config-item">
             <div class="config-label">取模方式</div>
-            <el-select v-model="store.imageConfig.modMode" class="dark-select">
-              <el-option
-                v-for="opt in modModeOptions"
-                :key="opt.value"
-                :label="opt.label"
-                :value="opt.value"
-              />
-            </el-select>
+            <ModModeSelector v-model="store.imageConfig.modMode" />
           </div>
 
           <div class="config-item">
@@ -604,23 +583,6 @@ const handleGenerate = async () => {
 }
 
 /* Element Plus 深色主题覆写 */
-:deep(.dark-select) {
-  .el-input__wrapper {
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    box-shadow: none;
-    border-radius: var(--radius-md);
-
-    .el-input__inner {
-      color: var(--text-primary);
-    }
-
-    .el-input__suffix {
-      color: var(--text-secondary);
-    }
-  }
-}
-
 :deep(.el-textarea__inner) {
   background: var(--bg-input);
   border: 1px solid var(--border-color);
